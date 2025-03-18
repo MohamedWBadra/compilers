@@ -100,9 +100,9 @@ namespace JASON_Compiler
                             }
                         }
                     }
-                    Console.WriteLine("fo2 token class\n");
+                    
                     FindTokenClass(CurrentLexeme);
-                    Console.WriteLine("b3d token class\n");
+                    
                     i = j - 1;
                 }
 
@@ -132,7 +132,7 @@ namespace JASON_Compiler
                     i = j - 1;
                 }
 
-                //"asdasdas";
+                
                 else if (CurrentChar == '\"')
                 {
                     j++;
@@ -154,7 +154,7 @@ namespace JASON_Compiler
                     i = j - 1;
 
                 }
-                /*xy*/
+                
                 else if (CurrentChar == '/' && SourceCode[j + 1] == '*')
                 {
                     CurrentLexeme += SourceCode[j + 1];
@@ -203,7 +203,7 @@ namespace JASON_Compiler
             Token_Class TC;
             Token Tok = new Token();
             Tok.lex = Lex;
-            Console.WriteLine("D5LNA TOKEN CLASS\n");
+            
             //Is it a reserved word?
             if (ReservedWords.TryGetValue(Tok.lex, out TC))
             {
@@ -216,7 +216,7 @@ namespace JASON_Compiler
             {
                 TC = Token_Class.Idenifier;
                 Tok.token_type = TC;
-                Console.WriteLine("5lsna if el identifier\n");
+                
             }
 
             //Is it a Constant?
@@ -249,7 +249,7 @@ namespace JASON_Compiler
         }
         bool isIdentifier(string lex)
         {
-            Console.WriteLine("d5lna is identfie\n");
+            
             bool isValid = true;
             // Check if the lex is an identifier or not.
             Regex ex = new Regex(@"^[a-zA-Z][a-zA-Z0-9]*$");
@@ -259,7 +259,7 @@ namespace JASON_Compiler
                 isValid = false;
 
             }
-            Console.WriteLine("5lsna is identeife\n");
+            
             return isValid;
         }
         bool isString(string lex)
