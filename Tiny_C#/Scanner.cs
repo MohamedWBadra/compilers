@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 public enum Token_Class
 {
-    Idenifier, Constant, String, Int, Float, Main, End, Semicolon, Comma,
+    Identifier, Constant, String, Int, Float, Main, End, Semicolon, Comma,
     Read, Write, Repeat, Until, If, ElseIf, Else, Then, Return, Endl,
     EqualOp, LessThanOp, AndOp, OrOp, GreaterThanOp, NotEqualOp, PlusOp, MinusOp,
     MultiplyOp, DivideOp, AssignmentStatement, Declaration_Statement, LCurlyBracket,
@@ -107,18 +107,19 @@ namespace JASON_Compiler
                 }
 
 
-                //3 * 2 * (2 + 1) / 2 - 5.3;
+                
                 else if (CurrentChar >= '0' && CurrentChar <= '9')
                 {
                     j++;
                     if (j < SourceCode.Length)
                     {
                         int x = 1;
-                        while ((SourceCode[j] >= '0' && SourceCode[j] <= '9') || ((x == 1) && (SourceCode[j].ToString() == ".")))
+                        while ((SourceCode[j] >= '0' && SourceCode[j] <= '9') || ((x == 1) && (SourceCode[j].ToString() == ".")) || (SourceCode[j] >= 'A' && SourceCode[j] <= 'z'))
                         {
                             if (SourceCode[j].ToString() == ".")
                             {
                                 x = 0;
+                                
                             }
                             CurrentLexeme += SourceCode[j].ToString();
                             j++;
@@ -127,12 +128,15 @@ namespace JASON_Compiler
                                 break;
                             }
                         }
+                     
+                        
+                        
                     }
                     FindTokenClass(CurrentLexeme);
                     i = j - 1;
                 }
 
-                
+                //"sdasdasd;
                 else if (CurrentChar == '\"')
                 {
                     j++;
@@ -147,14 +151,17 @@ namespace JASON_Compiler
                                 break;
                             }
                         }
-                        CurrentLexeme += SourceCode[j];
+                        if (j < SourceCode.Length)
+                        {
+                            CurrentLexeme += SourceCode[j];
+                        }
                     }
                     FindTokenClass(CurrentLexeme);
                     j++;
                     i = j - 1;
 
                 }
-                
+                /*asdasdasdas*/
                 else if (CurrentChar == '/' && SourceCode[j + 1] == '*')
                 {
                     CurrentLexeme += SourceCode[j + 1];
@@ -170,14 +177,20 @@ namespace JASON_Compiler
                                 break;
                             }
                         }
-                        CurrentLexeme += SourceCode[j].ToString();
-                        CurrentLexeme += SourceCode[j + 1].ToString();
+                        if (j < SourceCode.Length)
+                        {
+                            CurrentLexeme += SourceCode[j].ToString();
+                        }
+                        if(j + 1 < SourceCode.Length) { 
+                            CurrentLexeme += SourceCode[j + 1].ToString();
+                        }
                     }
                     j += 2;
                     FindTokenClass(CurrentLexeme);
                     i = j - 1;
 
                 }
+                
                 else
                 {
                     if (j + 1 < SourceCode.Length)
@@ -214,7 +227,7 @@ namespace JASON_Compiler
             //Is it an identifier?
             else if (isIdentifier(Lex))
             {
-                TC = Token_Class.Idenifier;
+                TC = Token_Class.Identifier;
                 Tok.token_type = TC;
                 
             }
@@ -243,7 +256,7 @@ namespace JASON_Compiler
             else
             {
                 Errors.Error_List.Add(Lex);
-
+                return;
             }
             Tokens.Add(Tok);
         }
@@ -255,10 +268,10 @@ namespace JASON_Compiler
             Regex ex = new Regex(@"^[a-zA-Z][a-zA-Z0-9]*$");
             if (!ex.IsMatch(lex))
             {
-                Console.WriteLine("m4 false\n");
                 isValid = false;
 
             }
+            
             
             return isValid;
         }
@@ -293,7 +306,7 @@ namespace JASON_Compiler
         {
             bool isValid = true;
             // Check if the lex is a constant (Number) or not.
-            Regex ex = new Regex(@"^[0-9](\.[0-9]+)*$");
+            Regex ex = new Regex(@"^[0-9]+(\.[0-9]+)*$");
             if (!ex.IsMatch(lex))
             {
                 isValid = false;
