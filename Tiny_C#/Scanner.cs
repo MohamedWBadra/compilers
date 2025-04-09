@@ -46,7 +46,7 @@ namespace JASON_Compiler
             ReservedWords.Add("return", Token_Class.RETURN);
             ReservedWords.Add("endl", Token_Class.Endl);
             ReservedWords.Add("main", Token_Class.Main);
-            
+
 
 
             Operators.Add(";", Token_Class.Semicolon);
@@ -88,7 +88,7 @@ namespace JASON_Compiler
                 if (CurrentChar >= 'A' && CurrentChar <= 'z') //if you read a character
                 {
                     j++;
-                    if(j < SourceCode.Length)
+                    if (j < SourceCode.Length)
                     {
                         while ((SourceCode[j] >= 'A' && SourceCode[j] <= 'z') || (SourceCode[j] >= '0' && SourceCode[j] <= '9'))
                         {
@@ -100,27 +100,22 @@ namespace JASON_Compiler
                             }
                         }
                     }
-                    
+
                     FindTokenClass(CurrentLexeme);
-                    
+
                     i = j - 1;
                 }
 
 
-                
+
                 else if (CurrentChar >= '0' && CurrentChar <= '9')
                 {
                     j++;
                     if (j < SourceCode.Length)
                     {
-                        int x = 1;
-                        while ((SourceCode[j] >= '0' && SourceCode[j] <= '9') || ((x == 1) && (SourceCode[j].ToString() == ".")) || (SourceCode[j] >= 'A' && SourceCode[j] <= 'z'))
+                        while ((SourceCode[j] >= '0' && SourceCode[j] <= '9') || (SourceCode[j].ToString() == ".") || (SourceCode[j] >= 'A' && SourceCode[j] <= 'z'))
                         {
-                            if (SourceCode[j].ToString() == ".")
-                            {
-                                x = 0;
-                                
-                            }
+
                             CurrentLexeme += SourceCode[j].ToString();
                             j++;
                             if (j >= SourceCode.Length)
@@ -128,9 +123,9 @@ namespace JASON_Compiler
                                 break;
                             }
                         }
-                     
-                        
-                        
+
+
+
                     }
                     FindTokenClass(CurrentLexeme);
                     i = j - 1;
@@ -161,7 +156,7 @@ namespace JASON_Compiler
                     i = j - 1;
 
                 }
-                /*asdasdasdas*/
+                
                 else if (CurrentChar == '/' && SourceCode[j + 1] == '*')
                 {
                     CurrentLexeme += SourceCode[j + 1];
@@ -181,7 +176,8 @@ namespace JASON_Compiler
                         {
                             CurrentLexeme += SourceCode[j].ToString();
                         }
-                        if(j + 1 < SourceCode.Length) { 
+                        if (j + 1 < SourceCode.Length)
+                        {
                             CurrentLexeme += SourceCode[j + 1].ToString();
                         }
                     }
@@ -190,7 +186,7 @@ namespace JASON_Compiler
                     i = j - 1;
 
                 }
-                
+
                 else
                 {
                     if (j + 1 < SourceCode.Length)
@@ -199,7 +195,7 @@ namespace JASON_Compiler
                         {
                             j++;
                             CurrentLexeme += SourceCode[j].ToString();
-                            
+
 
                         }
                     }
@@ -216,7 +212,7 @@ namespace JASON_Compiler
             Token_Class TC;
             Token Tok = new Token();
             Tok.lex = Lex;
-            
+
             //Is it a reserved word?
             if (ReservedWords.TryGetValue(Tok.lex, out TC))
             {
@@ -229,7 +225,7 @@ namespace JASON_Compiler
             {
                 TC = Token_Class.Identifier;
                 Tok.token_type = TC;
-                
+
             }
 
             //Is it a Constant?
@@ -240,8 +236,7 @@ namespace JASON_Compiler
             }
             else if (isComment(Lex))
             {
-                TC = Token_Class.Comment;
-                Tok.token_type = TC;
+                return;
             }
             else if (isString(Lex))
             {
@@ -262,7 +257,7 @@ namespace JASON_Compiler
         }
         bool isIdentifier(string lex)
         {
-            
+
             bool isValid = true;
             // Check if the lex is an identifier or not.
             Regex ex = new Regex(@"^[a-zA-Z][a-zA-Z0-9]*$");
@@ -271,13 +266,13 @@ namespace JASON_Compiler
                 isValid = false;
 
             }
-            
-            
+
+
             return isValid;
         }
         bool isString(string lex)
         {
-            
+
             bool isValid = true;
 
             Regex ex = new Regex("^(\")(.|\n)*(\")$");
@@ -293,7 +288,7 @@ namespace JASON_Compiler
         {
             bool isValid = true;
 
-            Regex ex = new Regex(@"^(/)(\*)(.|\n)*(\*)(/)$");
+            Regex ex = new Regex(@"^(/)(\)(.|\n)(\*)(/)$");
             if (!ex.IsMatch(lex))
             {
                 isValid = false;
@@ -306,7 +301,7 @@ namespace JASON_Compiler
         {
             bool isValid = true;
             // Check if the lex is a constant (Number) or not.
-            Regex ex = new Regex(@"^[0-9]+(\.[0-9]+)*$");
+            Regex ex = new Regex(@"^[0-9]+(\.[0-9]+)?$");
             if (!ex.IsMatch(lex))
             {
                 isValid = false;
