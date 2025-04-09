@@ -288,7 +288,7 @@ namespace JASON_Compiler
         {
             bool isValid = true;
 
-            Regex ex = new Regex(@"^(/)(\)(.|\n)(\*)(/)$");
+            Regex ex = new Regex(@"^(/)(\)(.|\n)*(\*)(/)$");
             if (!ex.IsMatch(lex))
             {
                 isValid = false;
